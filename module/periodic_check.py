@@ -6,6 +6,10 @@ from dtaidistance import dtw
 def diff_smooth(ts):
     dif = ts.diff().dropna()
     td = dif.describe()
+
+    if td["max"]-td['75%'] > 50 or td["min"]-td['25%'] > 50:
+        return ts
+
     high = td['75%'] + 1.5 * (td['75%'] - td['25%'])
     low = td['25%'] - 1.5 * (td['75%'] - td['25%'])
 
@@ -15,7 +19,10 @@ def diff_smooth(ts):
         n = 1
         start = forbid_index[i]
         while forbid_index[i+n] == start + timedelta(minutes=n):
-            n += 1
+            if (i+n) < len(forbid_index)-1:
+                n += 1
+            else:
+                break
         i += n - 1
 
         end = forbid_index[i]
@@ -31,7 +38,7 @@ def period_check(ts, period, dtw_value = 3):
 
     distance = dtw.distance(period_split[0], period_split[1])
     
-    print("distance", distance)
+    print("distance:", distance)
     if dtw_value > distance:
         return True
     

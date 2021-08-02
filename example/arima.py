@@ -109,11 +109,13 @@ if __name__ == '__main__':
     
     # Draw ts plt
     # draw_ts(ts)
-    ts = diff_smooth(ts)
+    smooth = ts.copy()
+    smooth = diff_smooth(smooth)
     test = ts[-period:]
+    train = smooth[:len(smooth)-period]
 
     # STL
-    decomposition = seasonal_decompose(ts, period=period, two_sided=False)
+    decomposition = seasonal_decompose(train, period=period, two_sided=False)
     trend = decomposition.trend
     seasonal = decomposition.seasonal
     # print(seasonal)
@@ -122,14 +124,11 @@ if __name__ == '__main__':
     # plt.show() 
 
     trend.dropna(inplace=True)
-    train = trend[:len(trend)-period]
     trend_model = ARIMA(train, order).fit(disp=-1, method='css')
 
     # predict
     pred_time_index = pd.date_range(start=train.index[-1], periods=period+1, freq='1min')[1:]
     trend_pred = trend_model.forecast(period)[0]
-    print(len(trend_pred))
-    exit(0)
     final_pred, low_conf, high_conf = add_season(seasonal, residual, period, pred_time_index, trend_pred)
 
     plt.subplot(211)
