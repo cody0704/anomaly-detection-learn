@@ -28,7 +28,7 @@ print(df.head())
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=df['date'], y=df['count'], name='api count'))
 fig.update_layout(showlegend=True, title='API Count 2017-11-11 ~ 2017-11-16')
-# fig.show()
+fig.show()
 
 # Train
 train, test = df.loc[df['date'] <= '2017-11-16'], df.loc[df['date'] > '2017-11-16']
@@ -43,7 +43,7 @@ scaler = scaler.fit(train[['count']])
 train['count'] = scaler.transform(train[['count']])
 test['count'] = scaler.transform(test[['count']])
 
-TIME_STEPS=60
+TIME_STEPS=1440
 
 def create_sequences(X, y, time_steps=TIME_STEPS):
     Xs, ys = [], []
@@ -94,16 +94,17 @@ else:
 print(model.summary())
 
 
-model.evaluate(X_test, y_test)
+# model.evaluate(X_test, y_test)
 
 X_train_pred = model.predict(X_train, verbose=0)
 train_mae_loss = np.mean(np.abs(X_train_pred - X_train), axis=1)
 
-plt.hist(train_mae_loss, bins=50)
-plt.xlabel('Train MAE loss')
-plt.ylabel('Number of Samples');
+# plt.hist(train_mae_loss, bins=50)
+# plt.xlabel('Train MAE loss')
+# plt.ylabel('Number of Samples');
 
-threshold = np.max(train_mae_loss)
+devication = 0.5
+threshold = np.max(train_mae_loss) * devication
 print(threshold, train_mae_loss)
 print(f'Reconstruction error threshold: {threshold}')
 
@@ -124,7 +125,7 @@ fig = go.Figure()
 fig.add_trace(go.Scatter(x=test_score_df['date'], y=test_score_df['loss'], name='Test loss'))
 fig.add_trace(go.Scatter(x=test_score_df['date'], y=test_score_df['threshold'], name='Threshold'))
 fig.update_layout(showlegend=True, title='Test loss vs. Threshold')
-# fig.show()
+fig.show()
 
 anomalies = test_score_df.loc[test_score_df['anomaly'] == True]
 anomalies.shape
@@ -133,4 +134,4 @@ fig = go.Figure()
 fig.add_trace(go.Scatter(x=test_score_df['date'], y=scaler.inverse_transform(test_score_df['count']), name='api count'))
 fig.add_trace(go.Scatter(x=anomalies['date'], y=scaler.inverse_transform(anomalies['count']), mode='markers', name='Anomaly'))
 fig.update_layout(showlegend=True, title='Detected anomalies')
-# fig.show()
+fig.show()

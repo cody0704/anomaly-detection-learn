@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
     if (check):
         test = ts[-period:]
-        train = smooth[:len(ts)-period]
+        train = smooth[:-period]
         # STL
         decomposition = seasonal_decompose(train, period=period, two_sided=False)
         trend = decomposition.trend
@@ -107,7 +107,6 @@ if __name__ == '__main__':
         # STL PLT
         # decomposition.plot()
         # plt.show()
-
         ##### START: ARIMA
 
         # trend data
