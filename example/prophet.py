@@ -7,7 +7,7 @@ from sklearn import metrics
 
 
 if __name__ == '__main__':
-    filename = '/Users/cody/Documents/github/cody/ml-anomaly-detection/data/api_access_fix.csv'
+    filename = '../data/api_access_fix.csv'
     df = pd.read_csv(filename)
     # df = df.rename(columns={'date': 'ds', 'count': 'y'})
     df = df.drop("Unnamed: 0",axis=1)

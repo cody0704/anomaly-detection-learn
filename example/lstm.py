@@ -15,7 +15,7 @@ from tensorflow.keras.layers import Dense, LSTM, Dropout, RepeatVector, TimeDist
 np.random.seed(1)
 tf.random.set_seed(1)
 
-df = pd.read_csv('/Users/cody/Documents/github/cody/ml-anomaly-detection/data/JNJ.csv')
+df = pd.read_csv('../data/JNJ.csv')
 df = df[['Date', 'Close']]
 df['Date'] = pd.to_datetime(df['Date'])
 

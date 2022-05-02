@@ -15,7 +15,7 @@ def read_data(f):
 
 if __name__ == '__main__':
     period = 1440
-    filename = '/Users/cody/Documents/github/cody/ml-anomaly-detection/data/api_access_fix.csv'
+    filename = '../data/api_access_fix.csv'
     ts = read_data(filename)
     train = ts[period:]
 

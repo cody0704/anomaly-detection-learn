@@ -102,7 +102,7 @@ def add_season(seasonal,residual, train_size, pred_time_index, trend_pred):
     return final_pred, low_conf, high_conf
 
 if __name__ == '__main__':
-    filename = '/Users/cody/Documents/github/cody/ml-anomaly-detection/data/api_access_fix.csv'
+    filename = '../data/api_access_fix.csv'
     ts = read_data(filename)
     period = 1440
     order = (2, 1, 3)
